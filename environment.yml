@@ -1,0 +1,9 @@
+name: covid-19
+
+channels:
+  - pyviz
+
+dependencies:
+  - holoviz
+  - jupyterlab
+  - nodejs

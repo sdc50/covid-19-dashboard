@@ -4,6 +4,12 @@ channels:
   - pyviz
 
 dependencies:
-  - holoviz
+#  - holoviz
+  - panel
+  - param
+  - holoviews
+  - geoviews
+  - xarray
+#  - plotly?
   - jupyterlab
   - nodejs

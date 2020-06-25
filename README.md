@@ -1,5 +1,7 @@
 # covid-19-dashboard
 
+## Setup
+
 1 - Clone Repo:
 ```
 git clone https://github.com/sdc50/covid-19-dashboard.git
@@ -26,4 +28,7 @@ Note the `COVID-19` directory should be in the `covid-19-dashboard` directory (i
 ```
 jupyter lab
 ```
+
+## Demo
+https://www.dropbox.com/s/zc86pf08yytb0x8/Covid%20Dashboard%20Sceen%20Capture.mov?dl=0
 

@@ -86,11 +86,11 @@ def load_data():
 
 
 def load_totals():
-    daily_reports_path = data_dir / 'csse_covid_19_daily_reports' / '{DATE}.csv'
+    daily_reports_path = data_dir / 'csse_covid_19_daily_reports' / '*.csv'
 
     today = datetime.datetime.now()
     yesterday = (today - datetime.timedelta(1))
-    daily_files = sorted(glob('/Users/rditlsc9/Workspace/covid-19-dashboard/COVID-19/csse_covid_19_data/csse_covid_19_daily_reports/*.csv'))
+    daily_files = sorted(glob(daily_reports_path.as_posix()))
     yesterday_file, today_file = daily_files[-2:]
     df_today = pd.read_csv(today_file)
     df_yesterday = pd.read_csv(yesterday_file)

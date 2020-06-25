@@ -1,5 +1,7 @@
 # covid-19-dashboard
 
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/sdc50/covid-19-dashboard/master?urlpath=/proxy/5006/covid-19-dashboard)
+
 ## Setup
 
 1 - Clone Repo:

@@ -1,4 +1,4 @@
-import geoviews as gv
+# import geoviews as gv
 import param
 import panel as pn
 import holoviews as hv
@@ -12,14 +12,14 @@ VARS = ['Confirmed', 'Deaths', 'Recovered', 'Active', 'New']
 
 class CovidMapper(param.Parameterized):
     date = param.String(default=data['Date'].values[0])
-    tiles = gv.tile_sources.CartoDark
+    tiles = hv.element.tiles.CartoDark()
 
     @staticmethod
     def infection_map(date, variable):
         date = data['Date'].values[date]
         seldata = {
-            'longitude': data['longitude'], 
-            'latitude': data['latitude'], 
+            'x': data['x'],
+            'y': data['y'],
             'Confirmed': data.sel(Quantity='Confirmed', Date=date, Aggregation='Totals')['counts'],
             'Deaths': data.sel(Quantity='Deaths', Date=date, Aggregation='Totals')['counts'],
             'Recovered': data.sel(Quantity='Recovered', Date=date, Aggregation='Totals')['counts'],
@@ -27,17 +27,18 @@ class CovidMapper(param.Parameterized):
             'New': data.sel(Quantity='Confirmed', Date=date, Aggregation='Daily')['counts'],
             'Country': data['Country'],
         }
-        points = gv.Points(seldata, kdims=['longitude', 'latitude'], vdims=VARS+['Country'])
+        points = hv.Points(seldata, kdims=['x', 'y'], vdims=VARS+['Country'])
         return CovidMapper.tiles * points.opts(
-            size=gv.dim(variable).log()*5,
-            logz=True,
+            size=hv.dim(variable).log()*5,
+            logz=False,
+            colorbar=True,
             fill_color=variable,
             fill_alpha=.5,
             line_color='gray', 
-            cmap='fire_r',
+            cmap='viridis',
             width=1500, 
-            height=700,
-            global_extent=True, 
+            responsive=True,
+            # global_extent=True,
             tools=['hover'],
             active_tools=['pan', 'wheel_zoom'],
             show_legend=False,

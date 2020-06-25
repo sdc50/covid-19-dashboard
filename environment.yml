@@ -2,14 +2,14 @@ name: covid-19
 
 channels:
   - pyviz
+  - conda-forge
 
 dependencies:
-#  - holoviz
   - panel
   - param
   - holoviews
-  - geoviews
   - xarray
-#  - plotly?
-  - jupyterlab
-  - nodejs
+  - pyproj
+  - pip
+  - pip:
+    - jupyter-server-proxy

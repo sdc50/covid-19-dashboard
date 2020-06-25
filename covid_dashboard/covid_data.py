@@ -3,6 +3,8 @@ import xarray as xr
 from pathlib import Path
 import datetime
 import numpy as np
+from glob import glob
+from pyproj import Transformer
 
 VARS = ['Confirmed', 'Deaths', 'Recovered']
 
@@ -49,15 +51,19 @@ def load_data():
 
     dfs = list()
     dims = ['Aggregation', 'Quantity', 'Country', 'Date']
+    transformer = Transformer.from_crs("epsg:4326", "epsg:3857")
     for var in VARS:
         df = pd.read_csv(time_series_path.as_posix().format(VAR=var.lower()))
         df.rename({'Country/Region': 'Country'}, axis=1, inplace=True)
         lat_lon = df[['Country', 'Lat', 'Long']]
         lat_lon = lat_lon.groupby('Country').first()
+        lat_lon['x_y'] = lat_lon.apply(lambda row: transformer.transform(row.Lat, row.Long), axis=1)
+        lat_lon['x'] = lat_lon.x_y.apply(lambda z: z[0])
+        lat_lon['y'] = lat_lon.x_y.apply(lambda z: z[1])
         df.drop(['Lat', 'Long'], axis=1, inplace=True)
         df = df.groupby('Country').sum()
-        df.insert(0, 'Lat', lat_lon['Lat'])
-        df.insert(1, 'Long', lat_lon['Long'])
+        df.insert(0, 'y', lat_lon['y'])
+        df.insert(1, 'x', lat_lon['x'])
         df.sort_values(by='Country', inplace=True)
         dfs.append(df)
     data_vars = [df.iloc[:, 2:].values for df in dfs]
@@ -71,8 +77,8 @@ def load_data():
     coords = dict(
         Country=('Country', df.index),
         Date=df.columns.tolist()[2:],
-        longitude=('Country', df['Long']),
-        latitude=('Country', df['Lat']),
+        x=('Country', df['x']),
+        y=('Country', df['y']),
         Quantity=VARS,
         Aggregation=['Totals', 'Daily']
     )
@@ -84,8 +90,10 @@ def load_totals():
 
     today = datetime.datetime.now()
     yesterday = (today - datetime.timedelta(1))
-    df_today = pd.read_csv(daily_reports_path.as_posix().format(DATE=today.strftime("%m-%d-%Y")))
-    df_yesterday = pd.read_csv(daily_reports_path.as_posix().format(DATE=yesterday.strftime("%m-%d-%Y")))
+    daily_files = sorted(glob('/Users/rditlsc9/Workspace/covid-19-dashboard/COVID-19/csse_covid_19_data/csse_covid_19_daily_reports/*.csv'))
+    yesterday_file, today_file = daily_files[-2:]
+    df_today = pd.read_csv(today_file)
+    df_yesterday = pd.read_csv(yesterday_file)
 
     today_totals = df_today[['Confirmed', 'Deaths', 'Recovered', 'Active']].sum()
     yesterday_totals = df_yesterday[['Confirmed', 'Deaths', 'Recovered', 'Active']].sum()

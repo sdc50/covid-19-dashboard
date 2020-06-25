@@ -74,7 +74,7 @@ class CovidPlotter(param.Parameterized):
     
     @param.depends('selected_data')
     def curves(self):
-        curves = self.selected_data.to(hv.Curve, 'Date', ).options(tools=['hover'])
+        curves = self.selected_data.to(hv.Curve, 'Date', ).options(tools=['hover'], show_grid=True)
         overlay = list()
         if self.quantity == 'All':
             overlay.append('Quantity')

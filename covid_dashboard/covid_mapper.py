@@ -1,6 +1,7 @@
 # import geoviews as gv
 import param
 import panel as pn
+import pandas as pd
 import holoviews as hv
 
 from .covid_data import data
@@ -11,7 +12,7 @@ VARS = ['Confirmed', 'Deaths', 'Recovered', 'Active', 'New']
 
 
 class CovidMapper(param.Parameterized):
-    date = param.String(default=data['Date'].values[0])
+    date = param.Date(default=data['Date'].values[0])
     tiles = hv.element.tiles.CartoDark()
 
     @staticmethod
@@ -49,7 +50,7 @@ class CovidMapper(param.Parameterized):
     
     @param.depends('date')
     def date_label(self):
-        return f'## {self.date}'
+        return f'## {pd.to_datetime(self.date).strftime("%m/%d/%Y")}'
     
     def panel(self):
         map_panel = pn.panel(

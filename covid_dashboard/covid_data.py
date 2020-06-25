@@ -76,7 +76,7 @@ def load_data():
 
     coords = dict(
         Country=('Country', df.index),
-        Date=df.columns.tolist()[2:],
+        Date=pd.to_datetime(df.columns.tolist()[2:]),
         x=('Country', df['x']),
         y=('Country', df['y']),
         Quantity=VARS,

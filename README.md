@@ -1,6 +1,11 @@
 # covid-19-dashboard
 
+## SciPy 2020 Poster
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/sdc50/covid-19-dashboard/master?filepath=notebooks%2FSciPy2020-Poster.ipynb)
+
+## Panel App
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/sdc50/covid-19-dashboard/master?urlpath=/proxy/5006/panel_app)
+
 
 ## Setup
 

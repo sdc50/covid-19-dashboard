@@ -1,4 +1,3 @@
-# import geoviews as gv
 import param
 import panel as pn
 import pandas as pd
@@ -6,7 +5,6 @@ import holoviews as hv
 
 from .covid_data import data
 
-# gv.extension('bokeh')
 
 VARS = ['Confirmed', 'Deaths', 'Recovered', 'Active', 'New']
 
@@ -36,8 +34,8 @@ class CovidMapper(param.Parameterized):
             fill_color=variable,
             fill_alpha=.5,
             line_color='gray', 
-            cmap='viridis',
-            width=1500, 
+            cmap='autumn',
+            height=700,
             responsive=True,
             # global_extent=True,
             tools=['hover'],
@@ -61,7 +59,7 @@ class CovidMapper(param.Parameterized):
         
         slider = map_panel[1][0][0]
         slider.param.watch(self.update_date, 'value')
-        slider.width = 1400
+        slider.width = 1200
         selector = map_panel[1][0][1]
         
         return pn.Column(map_panel[0], pn.Row(self.date_label, slider), selector)

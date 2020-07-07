@@ -7,20 +7,15 @@ from .covid_mapper import CovidMapper
 
 pn.extension()
 
-cp = CovidPlotter()
 
-
-class CovidDashboard(param.Parameterized):
-    # plotter = param.ClassSelector(CovidPlotter, default=cp)  # this doesn't work, not sure why
-    mapper = param.ClassSelector(CovidMapper, default=CovidMapper())
-
+class CovidSummary(param.Parameterized):
     @staticmethod
     def total_html(label, value, color):
         return f'<div style="background-color:{color}; display:inline-block; height: 100px; width: 300px; margin: 0 20px; color:white; padding-top: 20px;">' \
-                f'<span style="display:block; text-align:center; font-size:20px; margin: 0 20px -10px 20px;">{label}</span>' \
-                f'<span style="display:block; text-align:center; font-size:50px; margin: 0 20px;">{value:,}</span></div>'
-    
-    def summary_panel(self):
+            f'<span style="display:block; text-align:center; font-size:20px; margin: 0 20px -10px 20px;">{label}</span>' \
+            f'<span style="display:block; text-align:center; font-size:50px; margin: 0 20px;">{value:,}</span></div>'
+
+    def panel(self):
         global_totals = data.sum('Country').sel(Aggregation='Totals')
         img = 'http://wp.sbcounty.gov/cao/countywire/wp-content/uploads/2020/03/banner.png'
         # confirmed_total = int(global_totals.sel(Quantity='Confirmed').isel(Date=-1)['counts'])
@@ -52,10 +47,16 @@ class CovidDashboard(param.Parameterized):
                 width=1500,
             ),
         )
+
+
+class CovidDashboard(param.Parameterized):
+    summary = param.ClassSelector(CovidSummary, default=CovidSummary())
+    plotter = param.ClassSelector(CovidPlotter, default=CovidPlotter())  # this doesn't work, not sure why
+    mapper = param.ClassSelector(CovidMapper, default=CovidMapper())
     
     def panel(self):
         return pn.Tabs(
             ('Summary', self.summary_panel()),
             ('Map', self.mapper.panel()),
-            ('Plots', cp.panel()),
+            ('Plots', self.plotter.panel()),
         )

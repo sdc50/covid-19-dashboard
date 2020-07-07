@@ -56,7 +56,7 @@ class CovidDashboard(param.Parameterized):
     
     def panel(self):
         return pn.Tabs(
-            ('Summary', self.summary_panel()),
+            ('Summary', self.summary.panel()),
             ('Map', self.mapper.panel()),
             ('Plots', self.plotter.panel()),
         )

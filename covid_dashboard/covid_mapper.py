@@ -29,12 +29,13 @@ class CovidMapper(param.Parameterized):
         points = hv.Points(seldata, kdims=['x', 'y'], vdims=VARS+['Country'])
         return CovidMapper.tiles * points.opts(
             size=hv.dim(variable).log()*5,
-            logz=False,
+            logz=True,
+            clim=(1, None),
             colorbar=True,
             fill_color=variable,
             fill_alpha=.5,
             line_color='gray', 
-            cmap='autumn',
+            cmap='fire',
             height=700,
             responsive=True,
             # global_extent=True,
